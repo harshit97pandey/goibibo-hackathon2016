@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect,HttpRequest,HttpResponsePermanentRedirect,HttpResponseForbidden
 import json
 from models import *
@@ -25,28 +26,30 @@ def test(request):
 def  get_menu(request,hotelid):
 	return HttpResponse(json.dumps(MENU[hotelid]),content_type='application/json')
 
+@csrf_exempt
 def place_order(request,FMN):
 	resp = {'success':False}
 	try:
-		orders = request.POST['order']
+		body = json.loads(request.body)
+		orders = body.get('order',[]) if body else []
 		for order in orders:
-			o = Order(bookingId=FMN,itemId=order['id'],unit=order['unit'],price=order['price'])
+			o = Orders(bookingId=FMN,itemId=order['id'],unit=order['unit'],price=order['price'])
 			o.save()
 		resp['success'] = True
 	except:
 		raise
-	return resp
+	return HttpResponse(json.dumps(resp),content_type='application/json')
 
 def get_order(request,FMN):
 	resp = {'success':False,'order':[],'grandtotal':0}
 	try:
 		orders = []
 		grandtotal = 0
-		o = Order.objects.filter(bookingId=FMN)
+		o = Orders.objects.filter(bookingId=FMN)
 		for order in o:
 			orders.append({'id':order.itemId,'price':order.price,'unit':order.unit,'total':(order.price*order.unit)})
 			grandtotal += (order.price*order.unit)
 		resp = {'success':True,'order':orders,'grandtotal':grandtotal}
 	except:
 		raise
-	return resp
+	return HttpResponse(json.dumps(resp),content_type='application/json')
