@@ -25,6 +25,7 @@ class Uploader(APIView):
                obj = CheckInPhotoDB.objects.create(**serialised_post_data.data)
             except Exception, e:
                 print e
+                return Response(False, status=500)
             return Response(True, status=201)
         else: 
             return Response(False, status=500)
