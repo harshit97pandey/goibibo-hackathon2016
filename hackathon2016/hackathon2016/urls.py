@@ -8,5 +8,6 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^v1/checkin-photo/', include('idphotoupload.urls')),
+    url(r'^fnr/', include('foodnrestaurant.urls')),
 
 )
