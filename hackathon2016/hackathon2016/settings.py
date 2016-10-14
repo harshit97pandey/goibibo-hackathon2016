@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'foodnrestaurant',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -61,7 +62,7 @@ DATABASES = {
                 'NAME': 'goibibo',
                 'ENGINE': 'django.db.backends.mysql',
                 'USER': 'root',
-                'PASSWORD': 'root',
+                'PASSWORD': 'qwerty',
                 'HOST': '127.0.0.1',
                 'PORT': '',
                 'CONN_MAX_AGE': 60,
