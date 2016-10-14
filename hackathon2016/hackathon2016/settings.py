@@ -57,9 +57,17 @@ WSGI_APPLICATION = 'hackathon2016.wsgi.application'
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+     'default': {
+                'NAME': 'goibibo',
+                'ENGINE': 'django.db.backends.mysql',
+                'USER': 'root',
+                'PASSWORD': 'root',
+                'HOST': '127.0.0.1',
+                'PORT': '',
+                'CONN_MAX_AGE': 60,
+                'TIME_ZONE':'UTC'
+#                'OPTIONS':{"autocommit": True},
+                
     }
 }
 
