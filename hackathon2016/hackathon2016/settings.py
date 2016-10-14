@@ -63,7 +63,7 @@ DATABASES = {
                 'NAME': 'goibibo',
                 'ENGINE': 'django.db.backends.mysql',
                 'USER': 'root',
-                'PASSWORD': 'qwerty',
+                'PASSWORD': 'root',
                 'HOST': '127.0.0.1',
                 'PORT': '',
                 'CONN_MAX_AGE': 60,
