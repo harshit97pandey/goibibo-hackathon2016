@@ -11,16 +11,20 @@ from datetime import datetime, timedelta
 import traceback
 import json
 
-from . import models
+from .models import *
 
 
 class Uploader(APIView):
    # Create your views here.
    def post (self, request):
+        
         post_data = dict(request.data)
-        serialised_post_data = models.CheckInPhotoDBSerializer(data=post_data, partial=True)
+        serialised_post_data = CheckInPhotoDBSerializer(data=post_data, partial=True)
         if serialised_post_data.is_valid():
-            obj = models.CheckinPhotoDB.create(**serialised_post_data.data)
+            try:
+               obj = CheckInPhotoDB.objects.create(**serialised_post_data.data)
+            except Exception, e:
+                print e
             return Response(True, status=201)
         else: 
             return Response(False, status=500)
@@ -29,20 +33,20 @@ class Uploader(APIView):
 
 class Reader(APIView):
    # Create your views here.
-   def post (self, request):
-       post_data = dict(request.data)
+   def get (self, request):
+        post_data = dict(request.GET.dict())
        
         try:
-           if post_data.has_key("email"):
-                obj = models.CheckinPhotoDB.filter(Email=post_data["email"])
+            if post_data.has_key("email"):
+                 obj = CheckInPhotoDB.objects.filter(Email=post_data["email"])
                  
             elif post_data.has_key("mobile"):
-                obj = models.CheckinPhotoDB.filter(Mobile=post_data["mobile"])
+                obj = CheckInPhotoDB.objects.filter(Mobile=post_data["mobile"])
                 
             elif post_data.has_key("user_id"):
-                obj = models.CheckinPhotoDB.filter(Userid=post_data["user_id"])
+                obj = CheckInPhotoDB.objects.filter(Userid=post_data["user_id"])
 
-            serialised_data = models.CheckInPhotoDBSerializer(obj, many=True)
+            serialised_data = CheckInPhotoDBSerializer(obj, many=True)
             return Response (
                     serialised_data.data, 
                     status=201,
@@ -66,17 +70,17 @@ class Deleter(APIView):
         post_data = dict(request.data)
        
         try:
-           if post_data.has_key("email"):
-                obj = models.CheckinPhotoDB.delete(Email=post_data["email"])
+            if post_data.has_key("email"):
+                obj = CheckInPhotoDB.objects.delete(Email=post_data["email"])
                  
             elif post_data.has_key("mobile"):
-                obj = models.CheckinPhotoDB.delete(Mobile=post_data["mobile"])
+                obj = CheckInPhotoDB.objects.delete(Mobile=post_data["mobile"])
                 
             elif post_data.has_key("user_id"):
-                obj = models.CheckinPhotoDB.delete(Userid=post_data["user_id"])
+                obj = CheckInPhotoDB.objects.delete(Userid=post_data["user_id"])
 
             elif post_data.has_key("img_url"):
-                obj = models.CheckinPhotoDB.delete(AWSPhotoUrl=post_data["img_url"])
+                obj = CheckInPhotoDB.objects.delete(AWSPhotoUrl=post_data["img_url"])
 
             return Response (True, status=201)
 
